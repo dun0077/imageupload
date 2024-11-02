@@ -55,31 +55,57 @@
 
     // ฟังก์ชันล็อกอินที่ถูกเรียกใช้เมื่อผู้ใช้กดปุ่มล็อกอิน
     async function login() {
-      // รับค่า username และ password จากฟอร์ม
-      const user = document.getElementById('username').value;
-      const pass = document.getElementById('password').value;
+  const user = document.getElementById('username').value;
+  const pass = document.getElementById('password').value;
 
-      // ส่งคำขอ POST ไปที่ URL ของ Google Apps Script เพื่อยืนยันข้อมูลล็อกอิน
-      const response = await fetch(authUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ username: user, password: pass })  // ส่งข้อมูล username และ password ในรูปแบบ JSON
-      });
+  const response = await fetch(authUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username: user, password: pass }),
+    mode: 'cors'  // เปลี่ยน mode เป็น cors เพื่อให้รองรับการเชื่อมต่อแบบข้ามโดเมน
+  });
 
-      // รับข้อมูลการตอบกลับจาก Google Apps Script ในรูปแบบ JSON
-      const result = await response.json();
-      if (result.success) {
-        // ถ้าล็อกอินสำเร็จ ให้ซ่อนฟอร์มล็อกอินและแสดงส่วนแกลเลอรี่
-        document.getElementById('loginForm').style.display = 'none';
-        document.getElementById('gallerySection').style.display = 'block';
-        fetchImages();  // โหลดภาพในแกลเลอรี่หลังล็อกอินสำเร็จ
-      } else {
-        // ถ้าล็อกอินไม่สำเร็จ ให้แสดงข้อความแจ้งเตือน
-        document.getElementById('loginMessage').textContent = 'Invalid username or password';
-      }
+  if (response.ok) {
+    const result = await response.json();
+    if (result.success) {
+      document.getElementById('loginForm').style.display = 'none';
+      document.getElementById('gallerySection').style.display = 'block';
+      fetchImages();
+    } else {
+      document.getElementById('loginMessage').textContent = 'Invalid username or password';
     }
+  } else {
+    console.error('Login request failed:', response.status);
+  }
+}
+    
+    
+    // async function login() {
+    //   // รับค่า username และ password จากฟอร์ม
+    //   const user = document.getElementById('username').value;
+    //   const pass = document.getElementById('password').value;
+
+    //   // ส่งคำขอ POST ไปที่ URL ของ Google Apps Script เพื่อยืนยันข้อมูลล็อกอิน
+    //   const response = await fetch(authUrl, {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify({ username: user, password: pass })  // ส่งข้อมูล username และ password ในรูปแบบ JSON
+    //   });
+
+    //   // รับข้อมูลการตอบกลับจาก Google Apps Script ในรูปแบบ JSON
+    //   const result = await response.json();
+    //   if (result.success) {
+    //     // ถ้าล็อกอินสำเร็จ ให้ซ่อนฟอร์มล็อกอินและแสดงส่วนแกลเลอรี่
+    //     document.getElementById('loginForm').style.display = 'none';
+    //     document.getElementById('gallerySection').style.display = 'block';
+    //     fetchImages();  // โหลดภาพในแกลเลอรี่หลังล็อกอินสำเร็จ
+    //   } else {
+    //     // ถ้าล็อกอินไม่สำเร็จ ให้แสดงข้อความแจ้งเตือน
+    //     document.getElementById('loginMessage').textContent = 'Invalid username or password';
+    //   }
+    // }
 
     // ฟังก์ชันสำหรับดึงและแสดงรูปภาพจาก GitHub
     async function fetchImages() {
