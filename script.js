@@ -1,3 +1,6 @@
+let githubUser = 'dun007'
+let repo = 'imageupload'
+let imgFolder = 'images'
 
 async function login() {
     const username = document.getElementById('username').value;
@@ -25,7 +28,7 @@ async function login() {
 }
 
 async function loadAlbums(username) {
-    const response = await fetch(`https://api.github.com/repos/your-username/your-repo/contents/${username}`);
+    const response = await fetch(`https://api.github.com/repos/${githubUser}/${repo}/contents/${username}`);
     const albums = await response.json();
 
     const albumsContainer = document.getElementById('albums');
@@ -39,7 +42,7 @@ async function loadAlbums(username) {
 }
 
 async function loadAlbum(username, albumName) {
-    const response = await fetch(`https://api.github.com/repos/your-username/your-repo/contents/${username}/${albumName}`);
+    const response = await fetch(`https://api.github.com/repos/${githubUser}/${repo}/contents/${username}/${albumName}`);
     const images = await response.json();
 
     const albumContainer = document.createElement('div');
