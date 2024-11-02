@@ -7,6 +7,9 @@ async function login() {
     const usernameMD5 = CryptoJS.MD5(username).toString();
     const passwordMD5 = CryptoJS.MD5(password).toString();
 
+    console.log(usernameMD5)
+    console.log(passwordMD5)
+
     const response = await fetch('https://script.google.com/macros/s/AKfycbzY7X62FgUOyQOHw8_6C6_ojo0DIsrrZv3CZcTEWEF58J57k8ZL_DWPj8EhR5Mf5FVe/exec');
     const users = await response.json();
 
