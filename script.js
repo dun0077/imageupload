@@ -1,11 +1,16 @@
+
 async function login() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
+    // เข้ารหัส username และ password เป็น MD5
+    const usernameMD5 = CryptoJS.MD5(username).toString();
+    const passwordMD5 = CryptoJS.MD5(password).toString();
+
     const response = await fetch('https://script.google.com/macros/s/AKfycbzY7X62FgUOyQOHw8_6C6_ojo0DIsrrZv3CZcTEWEF58J57k8ZL_DWPj8EhR5Mf5FVe/exec');
     const users = await response.json();
 
-    const user = users.find(u => u['ชื่อผู้ใช้'] === username && u['รหัสผ่าน'] === password);
+    const user = users.find(u => u['ชื่อผู้ใช้'] === usernameMD5 && u['รหัสผ่าน'] === passwordMD5);
 
     if (user) {
         document.getElementById('login-container').style.display = 'none';
